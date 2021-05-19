@@ -1,0 +1,812 @@
+{
+  "departments": {
+    "business-optimisation": {
+      "title": "Business Optimisation",
+      "image": "ico-business-optimisation.png",
+      "groups": {
+        "priority_1_payment_management": {
+          "title": "Business Optimisation - Priority 1 - Payment Management",
+          "description": "Business optimisation reports to be executed daily",
+          "colour": "2",
+          "categories": {
+            "payment_management": {
+              "title": "P1 - Payment Management",
+              "description": "Critical payment reports to be reviewed that impact customers",
+              "colour": "3",
+              "check_time": "1 day",
+              "reports": {
+                "customer_not_billed_after_final_invoice": {
+                  "title": "Customers not billed even after 4 days of final invoice generation",
+                  "description": "List of customers not billed even after 4 days of final invoice generation.",
+                  "sql": "SELECT * FROM ra_rpt_v_cust_not_billed_after_final_invoice;",
+                  "map": "",
+                  "colour": "5",
+                  "hashfields": "customer_number,nmi_identifier,overall_quality_method,nem_file_type,quality_method,register_type"
+                },
+                "scheduled_prepayment_invoices_on_a_closed_customer_with_account_balance_in_credit": {
+                  "title": "Scheduled prepayment invoices on a closed customer with account balance in credit",
+                  "description": "All the scheduled prepayment invoices on a closed customer that are billed with greater total to pay than account balance",
+                  "sql": "SELECT * FROM ra_rpt_vw_sche_prepay_invoice_with_acc_bal_in_credit;",
+                  "map": "",
+                  "colour": "5",
+                  "hashfields": "customer_number,nmi"
+                },
+                "closed_customers_in_credit_or_debt": {
+                  "title": "Closed customers in credit or debt",
+                  "description": "List of closed customers who are in credit and customers who had unbilled charges after final invoice sent(debt).",
+                  "sql": "SELECT * FROM ra_rpt_v_closed_cust_in_credit_or_debt;",
+                  "map": "",
+                  "colour": "5",
+                  "hashfields": "customer_number"
+                },
+                "billing_frequency_vs_invoice_sent": {
+                  "title": "Billing frequency vs invoice sent",
+                  "description": "List of customers whose invoice have been missed or not met the customer's billing frequency.",
+                  "sql": "SELECT * FROM ra_rpt_v_billing_freq_vs_invoice_sent;",
+                  "map": "",
+                  "colour": "5",
+                  "hashfields": "customer_number,nmi_identifier"
+                },
+                "invoices_on_hold": {
+                  "title": "Invoices on hold",
+                  "description": "This is a list of invoices on hold in NEST. Please review each one and release as soon as possible.",
+                  "sql": "SELECT * FROM ra_rpt_vw_ops_invoice_hold;",
+                  "map": "",
+                  "colour": "5",
+                  "hashfields": "customer_number,invoice_number"
+                },
+                "supply_invoices_without_pdf": {
+                  "title": "Supply invoices without PDF",
+                  "description": "This is a list of supply invoices with status Y which do not have any pdf attached.",
+                  "sql": "SELECT * FROM ra_rpt_vw_ops_supply_invoice_without_pdf;",
+                  "map": "",
+                  "colour": "5",
+                  "hashfields": "customer_number,invoice_number"
+                }
+              }
+            }
+          }
+        },
+        "priority_1_customer_management": {
+          "title": "Business Optimisation - Priority 1 - Customer Management",
+          "description": "Business optimisation reports to be executed daily",
+          "colour": "2",
+          "categories": {
+            "customer_management": {
+              "title": "P1 - Customer Management",
+              "description": "A customer is not likely to be setup in NEST for a complete automated lifecycle",
+              "colour": "3",
+              "check_time": "1 day",
+              "reports": {
+                "sendgrid_daily_activity": {
+                  "title": "Sendgrid Daily Activity",
+                  "description": "List of all sendgrid daily status mails.",
+                  "sql": "SELECT * FROM ra_rpt_v_ops_sendgrid_daily_activity;",
+                  "map": "",
+                  "colour": "5",
+                  "hashfields": "email_address,date_time"
+                },
+                "unsuccessful_sms_delivery": {
+                  "title": "Unsuccessful SMS delivery",
+                  "description": "NEST sent a SMS message to a customer, however the cell phone did not accept the SMS message. The customer must be contacted for a correct phone number",
+                  "sql": "SELECT * FROM ra_rpt_sms_delivery_failures;",
+                  "map": "",
+                  "colour": "5",
+                  "hashfields": "customer_num,sms_date"
+                },
+                "customers_with_no_welcome_pack_mails": {
+                  "title": "Customers with no Welcome pack mails",
+                  "description": "List of customers for whom no Welcome pack mails are sent. Nesters need to check which welcome mail is missed and should manually send that mail to customer",
+                  "sql": "SELECT * FROM ra_rpt_vw_cust_with_welcome_pack_not_sent;",
+                  "map": "",
+                  "colour": "5",
+                  "hashfields": "nmi_identifier,customer_number"
+                },
+                "customers_with_incorrect_pricing_plan": {
+                  "title": "Customers with incorrect pricing plan",
+                  "description": "List of active customers who have incorrect pricing plan",
+                  "sql": "SELECT * FROM ra_rpt_mv_cust_with_incorrect_pricing_plan;",
+                  "map": "",
+                  "colour": "5",
+                  "hashfields": "customer_number,nmi,billing_status_id"
+                },
+                "customers_with_missing_dbs_records": {
+                  "title": "Customers with missing dbs records",
+                  "description": "List of customers who have missing daily billing status records",
+                  "sql": "SELECT * FROM ra_rpt_mv_cust_with_missing_dbs_records;",
+                  "map": "",
+                  "colour": "5",
+                  "hashfields": "customer_number,nmi_identifier,billing_id"
+                },
+                "customers_with_zero_duc_records": {
+                  "title": "Customers with zero duc records",
+                  "description": "A meter is sending constant zero data to NEST or there are no duc records for the 5 consecutive days, or more. It’s highly likely that the meter is not communicating",
+                  "sql": "SELECT * FROM ra_rpt_mv_cust_with_zero_duc;",
+                  "map": "",
+                  "colour": "5",
+                  "hashfields": "customer_number,nmi_identifier,reason"
+                },
+                "transfers_not_completed_within_the_expected_time_frame": {
+                  "title": "Transfers not completed within the expected time frame",
+                  "description": "Transfers that have not been completed within the expected time frame, please review them and do needful action",
+                  "sql": "SELECT * FROM ra_rpt_vw_transfer_not_completed_within_expected_time_frame;",
+                  "map": "",
+                  "colour": "5",
+                  "hashfields": "customer_number,nmi"
+                },
+                "customers_with_invalid_or_incomplete_concessions": {
+                  "title": "Customers with Invalid or Incomplete concessions",
+                  "description": "List of customers whose concession details are invalid or having incomplete data",
+                  "sql": "SELECT * FROM ra_rpt_v_cust_invalid_or_incomplete_concession;",
+                  "map": "",
+                  "colour": "5",
+                  "hashfields": "customer_number"
+                },
+                "incorrect_customer_classification_code": {
+                  "title": "Incorrect customer classification code",
+                  "description": "List of customers whose customer classification code is NULL or is incorrect",
+                  "sql": "SELECT * FROM ra_rpt_v_incorrect_cust_classification_code;",
+                  "map": "",
+                  "colour": "5",
+                  "hashfields": "customer_number"
+                },
+                "customer_signs_up_for_a_property_owned_by_reamped": {
+                  "title": "Customer signs up a property owned by ReAmped",
+                  "description": "Customer signs up for a property owned by ReAmped, Please review the records and make necessary changes",
+                  "sql": "SELECT * FROM ra_rpt_v_cust_signsup_reamped_owned_property;",
+                  "map": "",
+                  "colour": "5",
+                  "hashfields": "customer_number,billing_active,nmi_status_code"
+                },
+                "sign_up_completed_accounts_with_Billing_status_as_i": {
+                  "title": "Sign up completed accounts with billing status as i",
+                  "description": "Lists customers whose sign up completed accounts with billing status as I.",
+                  "sql": "SELECT * FROM ra_rpt_vw_sign_up_completed_accounts_with_billing_status_as_i;",
+                  "map": "",
+                  "colour": "2",
+                  "hashfields": "customer_number,signup_start_date"
+                }
+              }
+            }
+          }
+        },
+        "priority_1_metering_management": {
+          "title": "Business Optimisation - Priority 1 - Metering Management",
+          "description": "Business optimisation reports to be executed daily",
+          "colour": "2",
+          "categories": {
+            "metering_management": {
+              "title": "P1 - Metering Management",
+              "description": "The meter at the NMI is not operating correctly for seamless automation within NEST",
+              "colour": "3",
+              "check_time": "1 day",
+              "reports": {
+                "Consumption_records_that_do_not_have_proper_DailyNetworkCharges": {
+                  "title": "Consumption records that do not have proper DailyNetworkCharges",
+                  "description": "List of NMI's and consumption records that do not have proper DailyNetworkCharges. NMI's need to be analysed further",
+                  "sql": "SELECT * FROM ra_rpt_mv_nmi_register_has_no_DNCs;",
+                  "map": "",
+                  "colour": "2",
+                  "hashfields": "NMI,register_id,meter_serial_number,network_tariff_code"
+                },
+                "Consumption_records_that_do_not_have_proper_DailyUsageCharges": {
+                  "title": "Consumption records that do not have proper DailyUsageCharges",
+                  "description": "List of NMI's and consumption records that do not have proper DailyUsageCharges. NMI's need to be analysed further",
+                  "sql": "SELECT * FROM ra_rpt_mv_nmi_register_has_no_DUCs;",
+                  "map": "",
+                  "colour": "2",
+                  "hashfields": "NMI,register_id,meter_serial_number,network_tariff_code"
+                },
+                "nmi_having_no_metering_data_for_any_given_day": {
+                  "title": "NMI having no metering data for any given day",
+                  "description": "Lists NMI which do not having no metering data for any given day, please review",
+                  "sql": "SELECT * FROM ra_rpt_mv_missing_meter_data;",
+                  "map": "",
+                  "colour": "5",
+                  "hashfields": "customer_number,nmi_id,installation_type_code"
+                },
+                "consumption_outlier_kwh_day": {
+                  "title": "NMI consumption is > 200 kWh per day",
+                  "description": "Lists NMI which have consumption > 100 kWh per day for further investigation",
+                  "sql": "SELECT * FROM ra_rpt_mv_consumption_outlier;",
+                  "map": "",
+                  "colour": "4",
+                  "hashfields": "customer_number,nmi_identifier"
+                },
+                "smart_nmi_total_cons_more_than_its_interval_sum": {
+                  "title": "Smart NMI whose total consumption value is more than its interval sum",
+                  "description": "Lists Smart NMI which have total consumption value is more than its interval sum",
+                  "sql": "SELECT * FROM ra_rpt_mv_smart_nmi_consum_more_than_interval_sum;",
+                  "map": "",
+                  "colour": "4",
+                  "hashfields": "customer_number,nmi,consumption_id"
+                },
+                "Customers_who_had_multiple_sord": {
+                  "title": "Customers who had multiple sord",
+                  "description": " List of customers who have had SORD as we should really only be covering the first charge (In Ausgrid and Energex areas)",
+                  "sql": "SELECT * FROM ra_rpt_vw_cust_who_had_multiple_sord;",
+                  "map": "",
+                  "colour": "5",
+                  "hashfields": "customer_number,transaction_type"
+                },
+                "Ancillary_fee_anomalies": {
+                  "title": "Customers with ancillary fee anomalies",
+                  "description": "List of customers with event not created for b2b transaction OR mismatch of event counter party and transaction charge levied upon",
+                  "sql": "SELECT * FROM ra_rpt_mv_ancillary_fee_anomalies;",
+                  "map": "",
+                  "colour": "5",
+                  "hashfields": "customer_number,nmi_identifier,sord_number,event_id"
+                }
+              }
+            }
+          }
+        },
+        "weekly_payment_management": {
+          "title": "Business Optimisation - Weekly - Payment & Metering Management",
+          "description": "Customers that have data inconsistencies that must be manually corrected on a weekly basis",
+          "categories": {
+            "payment_management": {
+              "title": "Weekly - Payment Management",
+              "description": "Payment reports to be reviewed that impact customers",
+              "colour": "3",
+              "check_time": "1 week",
+              "reports": {}
+            },
+            "metering_management": {
+              "title": "Weekly - Metering Management",
+              "description": "The metering information is not setup correctly within NEST or the registry",
+              "colour": "3",
+              "check_time": "1 week",
+              "reports": {
+                "nmi_with_register_mdp_exception": {
+                  "title": "NMI's with MDP register read and marked as Exception",
+                  "description": "Lists the NMIs with MDP register read and they are marked as Exception.",
+                  "sql": "SELECT * FROM ra_rpt_vw_nmi_with_register_mdp_exception;",
+                  "map": "",
+                  "colour": "2",
+                  "hashfields": "nmi_identifier,register_read_id"
+                }
+              }
+            }
+          }
+        },
+        "weekly_customer_management": {
+          "title": "Business Optimisation - Weekly - Customer & Reconciliation Management",
+          "description": "Customers that have data inconsistencies that must be manually corrected on a weekly basis",
+          "categories": {
+            "customer_management": {
+              "title": "Weekly - Customer Management",
+              "description": "A customer is not likely to be setup in NEST for a complete optimisation",
+              "colour": "3",
+              "check_time": "1 week",
+              "reports": {
+                "customers_having_account_status_as_c_closing": {
+                  "title": "Customers having Account Status as C Closing",
+                  "description": "A customer closed their account and their Account status is set to C- Closing > 30 days from the billing status end date",
+                  "sql": "SELECT * FROM ra_rpt_vw_cust_account_status_set_to_c;",
+                  "map": "",
+                  "colour": "2",
+                  "hashfields": "nmi_identifier,customer_number"
+                },
+                "an_advance_customer_has_a_bill_amount_0": {
+                  "title": "An Advance customer has a bill amount of $0",
+                  "description": "An Advance customer has a billing amount of $0 and needs to be checked",
+                  "sql": "SELECT * FROM ra_rpt_vw_adv_cust_with_0_bill_amount;",
+                  "map": "",
+                  "colour": "2",
+                  "hashfields": "customer_number,nmi_identifier"
+                },
+                "an_advance_customer_has_mismatched_billing_product_and_price_plan": {
+                  "title": "An Advance customer has mismatched billing product and price plan",
+                  "description": "An Advance customer is either on an Advance price plan but has no billing product, or has an Advance billing product but no Advance price plan OR BS and BP dates are not set properly",
+                  "sql": "SELECT * FROM ra_rpt_vw_adv_cust_with_mismatch_in_bp_pp;",
+                  "map": "",
+                  "colour": "2",
+                  "hashfields": "customer_number,nmi_identifier,billing_id"
+                },
+                "sendgrid_status_customers_who_have_changed_their_email_during_ls": {
+                  "title": "Sendgrid status of customers who have changed their email id during LS process",
+                  "description": "Retrieves the sendgrid status of a communication sent to a customer’s old email id, when he changes his email id in the middle of LS process",
+                  "sql": "SELECT * FROM ra_rpt_mv_ls_cust_changed_email_sendgrid_status;",
+                  "map": "",
+                  "colour": "2",
+                  "hashfields": "customer_number,nmi_identifier,comms_id"
+                },
+                "sendgrid_status_of_similar_communications_with_same_subject_and_same_email": {
+                  "title": "Sendgrid status of similar communications i.e same subject and same email id",
+                  "description": "Lists the sendgrid status of similar communications i.e same subject and same email id",
+                  "sql": "SELECT * FROM ra_rpt_mv_ls_cust_sendgrid_status_email_subj_similar;",
+                  "map": "",
+                  "colour": "2",
+                  "hashfields": "customer_number,nmi_identifier,comms_id"
+                }
+              }
+            },
+            "reconciliation_management": {
+              "title": "Weekly - Reconciliation Management",
+              "description": "The metering information is not setup correctly within NEST or the registry",
+              "colour": "3",
+              "check_time": "1 week",
+              "reports": {}
+            }
+          }
+        },
+        "monthly": {
+          "title": "Business Optimisation - Monthly",
+          "description": "Reports to be actioned monthly",
+          "categories": {
+            "metering_management": {
+              "title": "Monthly - Metering Management",
+              "description": "Metering inconsistencies that will impact successful operations",
+              "colour": "3",
+              "check_time": "1 month",
+              "reports": {}
+            }
+          }
+        }
+      }
+    },
+    "Compliance": {
+      "title": "Compliance",
+      "image": "ico-intelligence.png",
+      "groups": {
+        "compliance": {
+          "title": "Compliance Immediate",
+          "description": "Immediate Compliance Reports to be executed hourly",
+          "categories": {
+            "products": {
+              "title": "Retailer-initiated de-energisation of premises – small customers",
+              "description": "Retailer-initiated de-energisation of premises – small customers",
+              "colour": "3",
+              "check_time": "",
+              "reports": {
+                "rule_116_1b_customer_life_support_disconnection": {
+                  "title": "Retail Rules, Part 6 Divisions 1 and 2 Rule 116 (1)(b) - Customers on life support and are scheduled for disconnection",
+                  "description": "Despite any other provisions of this Division but subject to subrule (2), (3) and (4), a retailer must not arrange for a de-energisation of a customer's premises to occur:(b) where the customer has made a complaint, directly related to the reason for the proposed de-energisation, to the retailer under the retailer’s standard complaints and dispute resolution procedures, and the complaint remains unresolved; ;",
+                  "sql": "SELECT * FROM ra_rpt_comp_lifesupport_disconnection;",
+                  "map": "",
+                  "colour": "5",
+                  "hashfields": "customer_number"
+                },
+                "rule_116_1b_customer_disconnection_and_complaints": {
+                  "title": "Retail Rules, Part 6 Divisions 1 and 2 Rule 116 (1)(b) - Customers scheduled for disconnection and have made a complaint",
+                  "description": "Despite any other provisions of this Division but subject to subrule (2), (3) and (4), a retailer must not arrange for a de-energisation of a customer's premises to occur:(b) where the customer has made a complaint, directly related to the reason for the proposed de-energisation, to the retailer under the retailer’s standard complaints and dispute resolution procedures, and the complaint remains unresolved; ;",
+                  "sql": "SELECT * FROM ra_rpt_vw_comp_disconnection_complaint;",
+                  "map": "",
+                  "colour": "5",
+                  "hashfields": "customer_number"
+                },
+                "retailer_initiated_de_energisation_1d": {
+                  "title": "Retail Rules, Part 6 Divisions 1 and 2 Rule 116 (1)(d) - Customers that are on or have had a payment plan and are scheduled for disconnection",
+                  "description": "Despite any other provisions of this Division but subject to subrule (2), (3) and (4), a retailer must not arrange for a de-energisation of a customer's premises to occur:(c) where the customer has made a complaint, directly related to the reason for the proposed de-energisation, to the energy ombudsman, and the complaint remains unresolved; ;",
+                  "sql": "SELECT * FROM ra_rpt_vw_comp_disconnection_paymentplan;",
+                  "map": "",
+                  "colour": "5",
+                  "hashfields": "customer_number"
+                }
+              }
+            }
+          }
+        },
+        "Quarterly": {
+          "title": "Compliance - Quarterly",
+          "description": "Compliance reports to be executed daily",
+          "categories": {
+            "payment_management": {
+              "title": "Explicit Informed Consent",
+              "description": "Retail Rules, ",
+              "colour": "3",
+              "check_time": "1 week",
+              "reports": {
+                "customer_not_selected_explicit_informed_consent": {
+                  "title": "List of Customers not selected the explicit informed consent",
+                  "description": "List of Customers not selected the explicit informed consent during the signup",
+                  "sql": "SELECT * FROM ra_rpt_vw_explicit_informed_consent;",
+                  "map": "",
+                  "colour": "5",
+                  "hashfields": "customer_number"
+                }
+              }
+            },
+            "customer_management": {
+              "title": "Customer Management",
+              "description": "A customer is not likely to be setup in NEST for a complete automated lifecycle",
+              "colour": "3",
+              "check_time": "1 day",
+              "reports": {}
+            },
+            "metering_management": {
+              "title": "Metering Management",
+              "description": "The meter at the NMI is not operating correctly for seamless automation within NEST",
+              "colour": "3",
+              "check_time": "1 day",
+              "reports": {}
+            },
+            "customer_m": {
+              "title": "Customer Management",
+              "description": "A customer is not likely to be setup in NEST for a complete optimisation",
+              "colour": "3",
+              "check_time": "1 week",
+              "reports": {}
+            }
+          }
+        },
+        "Half Yearly": {
+          "title": "Compliance - Half Yearly",
+          "description": "Compliance reports to be executed weekly",
+          "categories": {
+            "payment_management": {
+              "title": "Payment Management",
+              "description": "Payment reports to be reviewed that impact customers",
+              "colour": "3",
+              "check_time": "1 week",
+              "reports": {}
+            },
+            "customer_management": {
+              "title": "Customer Management",
+              "description": "A customer is not likely to be setup in NEST for a complete optimisation",
+              "colour": "3",
+              "check_time": "1 week",
+              "reports": {}
+            }
+          }
+        }
+      }
+    },
+    "operations": {
+      "title": "Operations",
+      "image": "ico-operations.png",
+      "groups": {
+        "priority_1": {
+          "title": "Operations - Priority 1",
+          "description": "Operational reports to be executed daily",
+          "categories": {
+            "payment_management": {
+              "title": "Payment Management",
+              "description": "Critical payment reports to be reviewed that impact customers",
+              "colour": "3",
+              "check_time": "1 day",
+              "reports": {
+                "customers_with_an_incorrect_or_missing_QLD_dividend_credit": {
+                  "title": "Customers with an incorrect or missing QLD dividend credit",
+                  "description": "These customers have never received the QLD dividend and should have OR they have received a credit in the latest dividend payment but shouldn't have since switched away OR they were not eligible for the credit.",
+                  "sql": "SELECT * FROM ra_rpt_vw_cust_with_incorrect_qld_credit_2020;",
+                  "map": "",
+                  "colour": "2",
+                  "hashfields": "customer_number,nmi_identifier"
+                }
+              }
+            },
+            "customer_management": {
+              "title": "Customer Management",
+              "description": "A customer is not likely to be setup in NEST for a complete automated lifecycle",
+              "colour": "3",
+              "check_time": "1 day",
+              "reports": {
+                "the_customer_has_confilicting_states_between_overdue_and_ok": {
+                  "title": "The customer has conflicting states between overdue and ok",
+                  "description": "A customer status is likely to be incorrect as there are conflicts between the customer status and other overdue configurations",
+                  "sql": "SELECT * FROM ra_rpt_v_wrong_customer_status_not_ok;",
+                  "map": "",
+                  "colour": "2",
+                  "hashfields": "customer_number"
+                },
+                "the_customer_left_but_did_not_pay_all_outstanding_invoices": {
+                  "title": "The customer left but did not pay all outstanding invoices",
+                  "description": "The customer left but failed to pay all their invoices and have an outstanding balance against their account",
+                  "sql": "SELECT * FROM ra_rpt_v_closed_account_outstanding_balance;",
+                  "map": "",
+                  "colour": "2",
+                  "hashfields": "customer_number"
+                },
+                "customer_to_be_sent_to_debt_collection": {
+                  "title": "Customers to be sent to debt collection",
+                  "description": "These customers are in OD5 and have an open OD5 - Debt Collection ticket. Please determine if they need to be sent to debt collection",
+                  "sql": "SELECT * FROM ra_rpt_v_customers_send_to_debt_collection;",
+                  "map": "",
+                  "colour": "2",
+                  "hashfields": "customer_number,email"
+                },
+                "closed_od_accounts_who_wont_be_sent_to_debt_collection": {
+                  "title": "Closed OD accounts who won't be sent to debt collection",
+                  "description": "These customers have closed account and an OD status but won’t move to OD5. Please review",
+                  "sql": "SELECT * FROM ra_rpt_v_closed_od_acc_not_sent_to_debt_collection;",
+                  "map": "",
+                  "colour": "2",
+                  "hashfields": "customer_number,customer_status,billing_end"
+                },
+                "OD5_customers_with_incorrect_payment_transition_code": {
+                  "title": "OD5 customers with incorrect payment transition code",
+                  "description": "These customers have have OD5 status but incorrect payment transition code",
+                  "sql": "SELECT * FROM ra_rpt_v_incorrect_transaction_OD5_customers;",
+                  "map": "",
+                  "colour": "2",
+                  "hashfields": "customer_number"
+                },
+                "AEC_concession_given_to_the_customers_exceeded_the_threshold_value": {
+                  "title": "AEC concession given to the customers exceeded the threshold value",
+                  "description": "AEC concession given to the customers should not exceed the threshold value in DHS concession. Please verify and take necessary actions",
+                  "sql": "SELECT * FROM ra_rpt_vw_cust_having_the_concession_morethan_threshold;",
+                  "map": "",
+                  "colour": "2",
+                  "hashfields": "customer_number,nmi_identifier"
+                }
+              }
+            },
+            "metering_management": {
+              "title": "Metering Management",
+              "description": "The meter at the NMI is not operating correctly for seamless automation within NEST",
+              "colour": "3",
+              "check_time": "1 day",
+              "reports": {
+                "customers_who_have_no_actual_read_over_185_days": {
+                  "title": "Customers who have no actual read over 185 days",
+                  "description": "List of customers who have no actual reads over 185 days",
+                  "sql": "SELECT * FROM ra_rpt_mv_cust_with_no_actual_reads;",
+                  "map": "",
+                  "colour": "2",
+                  "hashfields": "customer_number,nmi_identifier"
+                },
+                "active_vacant_properties": {
+                  "title": "Active vacant properties",
+                  "description": "A list of all open T billing statuses which have not been de-energised and require review.",
+                  "sql": "SELECT * FROM ra_rpt_mv_active_vacant_properties;",
+                  "map": "",
+                  "colour": "2",
+                  "hashfields": "nmi,is_active,start_date"
+                },
+                "dvp_list": {
+                  "title": "DVP list",
+                  "description": "A list of NMIs with open tickets tagged as DVP2 sent.",
+                  "sql": "SELECT * FROM ra_rpt_mv_dvp_list;",
+                  "map": "",
+                  "colour": "2",
+                  "hashfields": "nmi,open_tickets"
+                }
+              }
+            }
+          }
+        },
+        "daily": {
+          "title": "Operations - Daily",
+          "description": "Customers that have data inconsistencies that must be manually corrected on a daily basis",
+          "categories": {
+            "payment_management": {
+              "title": "Payment Management",
+              "description": "Payment reports to be reviewed that impact customers",
+              "colour": "3",
+              "check_time": "1 day",
+              "reports": {}
+            },
+            "customer_management": {
+              "title": "Customer Management",
+              "description": "A customer is not likely to be setup in NEST for a complete optimisation",
+              "colour": "3",
+              "check_time": "1 day",
+              "reports": {
+                "Customers_who_not_received_welcomepack_in_4days": {
+                  "title": "Customers who have not received a ls welcome pack within 4 days of initial notification",
+                  "description": "Customers who have not received a ls welcome pack within 4 days of initial notification",
+                  "sql": "SELECT * FROM ra_rpt_v_ls_welcome_pack_not_sent;",
+                  "map": "",
+                  "colour": "2",
+                  "hashfields": "Customer_number, nmi_identifier, initial_notification_date"
+                }
+              }
+            }
+          }
+        },
+        "weekly": {
+          "title": "Operations - Weekly",
+          "description": "Customers that have data inconsistencies that must be manually corrected on a weekly basis",
+          "categories": {
+            "payment_management": {
+              "title": "Payment Management",
+              "description": "Payment reports to be reviewed that impact customers",
+              "colour": "3",
+              "check_time": "1 week",
+              "reports": {}
+            },
+            "customer_management": {
+              "title": "Customer Management",
+              "description": "A customer is not likely to be setup in NEST for a complete optimisation",
+              "colour": "3",
+              "check_time": "1 week",
+              "reports": {
+                "Customers_with_billing_date_is_in_past": {
+                  "title": "Customers with billing date is in past",
+                  "description": "List of active customers with billing date is in past or null",
+                  "sql": "SELECT * FROM ra_rpt_vw_cust_ops_billing_date_past_or_null;",
+                  "map": "",
+                  "colour": "2",
+                  "hashfields": "customer_number,name"
+                },
+                "customers_with_anomalies_on_life_support_data": {
+                  "title": "Customers with anomalies on Life support data",
+                  "description": "Customers with anomalies on Life support data i.e.  i.e. LSR / LSN are not created/tagged or incorrectly populated.",
+                  "sql": "SELECT * FROM ra_rpt_vw_lsr_lsn_amomalies;",
+                  "map": "",
+                  "colour": "2",
+                  "hashfields": "customer_number,nmi_identifier,lsr_id"
+                },
+                "closed_customers_in_hardship": {
+                  "title": "Closed customers in hardship",
+                  "description": "Closed customers who have active hardship indicator OR there is no Hardship Exit logged action",
+                  "sql": "SELECT * FROM ra_rpt_v_closed_cust_in_hardship;",
+                  "map": "",
+                  "colour": "2",
+                  "hashfields": "customer_number"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "sales": {
+      "title": "Sales",
+      "image": "ico-sales.png",
+      "groups": {
+        "sales": {
+          "title": "Sales Priority 1",
+          "description": "Customer leads that can be chased for closing as new customers",
+          "categories": {
+            "channels": {
+              "title": "Channels",
+              "description": "Third party sales channels",
+              "colour": "3",
+              "check_time": "1 day",
+              "reports": {}
+            },
+            "retention": {
+              "title": "Retention",
+              "description": "The meter at the NMI is not operating correctly for seamless automation within NEST",
+              "colour": "3",
+              "check_time": "1 day",
+              "reports": {}
+            }
+          }
+        }
+      }
+    },
+    "marketing": {
+      "title": "Marketing",
+      "image": "ico-marketing.png",
+      "groups": {
+        "sales": {
+          "title": "Marketing",
+          "description": "Campaign, channel and conversion tracking",
+          "categories": {
+            "campaign": {
+              "title": "Campaign",
+              "description": "Campaign tracking and management",
+              "colour": "3",
+              "check_time": "",
+              "reports": {}
+            },
+            "channel": {
+              "title": "Channel",
+              "description": "Third party sales channels",
+              "colour": "3",
+              "check_time": "",
+              "reports": {}
+            },
+            "conversion": {
+              "title": "Conversion",
+              "description": "Data to assist in better customer conversion",
+              "colour": "3",
+              "check_time": "",
+              "reports": {}
+            },
+            "website": {
+              "title": "Website",
+              "description": "Data that can be used for website statistics",
+              "colour": "3",
+              "check_time": "",
+              "reports": {}
+            }
+          }
+        }
+      }
+    },
+    "finance": {
+      "title": "Finance",
+      "image": "ico-finance.png",
+      "groups": {
+        "finance": {
+          "title": "Finance",
+          "description": "Reports to assist in financial management",
+          "categories": {
+            "payment_management": {
+              "title": "Payment Management",
+              "description": "Reports to assist in financial management",
+              "colour": "3",
+              "check_time": "1 month",
+              "reports": {}
+            },
+            "customer_management": {
+              "title": "Customer Management",
+              "description": "Customer reports for financial analysis",
+              "colour": "3",
+              "check_time": "1 month",
+              "reports": {}
+            },
+            "forecasting": {
+              "title": "Forecasting",
+              "description": "Forecasting reports for financial analysis",
+              "colour": "3",
+              "check_time": "1 month",
+              "reports": {}
+            }
+          }
+        }
+      }
+    },
+    "technology": {
+      "title": "Technology",
+      "image": "ico-technology.png",
+      "groups": {
+        "technology": {
+          "title": "Technology",
+          "description": "Technology based matters to be manually reviewed or corrected until the technology set is improved",
+          "categories": {
+            "log_management": {
+              "title": "Server Log File Review",
+              "description": "Managing server log files",
+              "colour": "3",
+              "check_time": "1 day",
+              "reports": {}
+            },
+            "data_management": {
+              "title": "Data Management",
+              "description": "Reports to assist in technology management",
+              "colour": "3",
+              "check_time": "1 week",
+              "reports": {}
+            }
+          }
+        }
+      }
+    },
+    "intelligence": {
+      "title": "Intelligence",
+      "image": "ico-intelligence.png",
+      "groups": {
+        "intelligence": {
+          "title": "Intelligence",
+          "description": "Reviewing data to create patterns and trends to assist in business improvement",
+          "categories": {
+            "products": {
+              "title": "Products",
+              "description": "Analysing products",
+              "colour": "3",
+              "check_time": "",
+              "reports": {}
+            },
+            "customers": {
+              "title": "Customers",
+              "description": "Analysing customers",
+              "colour": "3",
+              "check_time": "",
+              "reports": {}
+            },
+            "survey": {
+              "title": "Survey",
+              "description": "Analysing customer surveys",
+              "colour": "3",
+              "check_time": "",
+              "reports": {}
+            },
+            "operations": {
+              "title": "Operations",
+              "description": "Analysing operations",
+              "colour": "3",
+              "check_time": "",
+              "reports": {}
+            }
+          }
+        }
+      }
+    }
+  }
+}
